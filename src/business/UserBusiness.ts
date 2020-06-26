@@ -16,7 +16,7 @@ export class UserBusiness{
     }
 
     public async login(email: string): Promise<any> {
-        await this.userDatabase.getUserByEmail(email);
+       return  await this.userDatabase.getUserByEmail(email);
     }
 
     public async deletefriendship(user_id: string, friend_id: string){
@@ -31,7 +31,7 @@ export class UserBusiness{
         date: string, 
         type: string
     ): Promise<void>{
-        await this.userDatabase.createPost(post_id, user_id, photo, description, date, type);
+        //await this.userDatabase.createPost(post_id, user_id, photo, description, date, type);
     }
         
 };
