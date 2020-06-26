@@ -7,9 +7,9 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-app.use("/signup", userRouter);
-app.use("/login", userRouter);
-app.use("/friendship", userRouter);
+app.use("/", userRouter);
+app.use("/", userRouter);
+app.use("/", userRouter);
 
 
 const server = app.listen(process.env.PORT || 3000, () => {

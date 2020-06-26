@@ -1,7 +1,6 @@
 import knex from "knex";
 import Knex from "knex";
 
-
 export abstract class BaseDataBase{
    
     getConnection(): Knex{
