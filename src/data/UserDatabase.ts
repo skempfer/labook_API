@@ -52,12 +52,15 @@ export class UserDatabase extends BaseDataBase {
         }
     }
 
-    public async friendship(user_id: string,  friend_id: string) {
+    public async friendship( user_id: string,  friend_id: string) {
         try {
+            const friendship_id = this.idGenerator.generate();
+
             await super.getConnection().raw(
             `
-                INSERT INTO Labook_friendship(user_id, friend_id)
+                INSERT INTO Labook_friendship(friendship_id, user_id, friend_id)
                 VALUES (
+                    "${friendship_id}",
                     "${user_id}",
                     "${friend_id}"
                 )
