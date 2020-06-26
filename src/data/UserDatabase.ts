@@ -90,11 +90,11 @@ export class UserDatabase extends BaseDataBase {
             await this.getConnection()
             .insert({
                 post_id,
-                user_id,
                 photo,
                 description,
                 date,
-                type
+                type,
+                user_id
             })
             .into("Labook_posts");
         }catch (err){

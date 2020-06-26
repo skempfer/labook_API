@@ -93,29 +93,20 @@ export class UserController {
 
   async createPost (req: Request, res: Response){
     try {
+      // const token = req.headers.authorization as string;
+      // authenticator.getData(token);
       const token = req.headers.authorization as string;
-      authenticator.getData(token);
+      const idData = authenticator.getData(token);
+      const user_id = idData.id;
 
       const postData = {
-        user_id: req.params.user_id,
         photo: req.body.photo,
         description: req.body.description,
-        type: req.body.type
-      };
+        type: req.body.type,
+        user_id
+      };      
       
-      if (!postData.photo) {
-        throw new Error("Invalid photo");
-      }
-
-      if (!postData.description) {
-        throw new Error("Invalid description");
-      }
-
-      if (!postData.type) {
-        throw new Error("Invalid type");
-      }
-
-      await userBusiness.createPost(postData.user_id, postData.photo, postData.description, postData.type);
+      await userBusiness.createPost(postData.photo, postData.description, postData.type, postData.user_id,);
       
       res.status(200).send({
         message: "Post successfuly registered",
