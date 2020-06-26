@@ -2,11 +2,8 @@ import { Request, Response } from "express";
 import { UserBusiness } from "../business/UserBusiness";
 import { HashManager } from "../services/HashManager";
 import { Authenticator } from "../services/Authenticator";
-import { SignupInputDTO, LoginInputDTO } from "../dto/UserDTO";
-import { createPostInputDTO } from "../dto/PostDTO"
-import { userRouter } from "../router/UserRouter";
+import { SignupInputDTO} from "../dto/UserDTO";
 import { UserDatabase } from "../data/UserDatabase";
-import { IdGenerator } from "../services/IdGenerator";
 
 const userBusiness: UserBusiness = new UserBusiness();
 const authenticator = new Authenticator();
@@ -14,34 +11,30 @@ const userDatabase = new UserDatabase();
 const hashManager = new HashManager();
 
 export class UserController {
-
     
-    async signup(req: Request, res: Response) {
-      
-        try {
-            const userData: SignupInputDTO = {
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password
-            }
+  async signup(req: Request, res: Response) {
+    try {
+      const userData: SignupInputDTO = {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+      }
             
-            const hashManager = new HashManager();
-            const hashPassword = await hashManager.hash(userData.password);
+      const hashManager = new HashManager();
+      const hashPassword = await hashManager.hash(userData.password);
 
-            const id = await userBusiness.signup(userData.name, userData.email, hashPassword);
+      const id = await userBusiness.signup(userData.name, userData.email, hashPassword);
 
-            const accessToken = authenticator.generateToken({
-                id: id                
-            });
+      const accessToken = authenticator.generateToken({ id  });
 
-            res.status(200).send({ accessToken });
+      res.status(200).send({ accessToken });
 
-        } catch (err) {
-            res.status(400).send({ error: err.message });
-        }
-    }
+      } catch (err) {
+        res.status(400).send({ error: err.message });
+      }
+  }
 
-    async friendship(req: Request, res: Response) {
+  async friendship(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string;
 
@@ -60,10 +53,9 @@ export class UserController {
         } catch(err) {
             res.status(400).send({ error: err.message });
         }
-    }
-
+  }
    
-    async login (req: Request, res: Response) {
+  async login (req: Request, res: Response) {
       try {
         if (!req.body.email || req.body.email.indexOf("@") === -1) {
           throw new Error("Invalid email");
@@ -97,44 +89,39 @@ export class UserController {
           message: err.message,
         });
       }
+  };
+
+  async createPost (req: Request, res: Response){
+    try {
+      const token = req.headers.authorization as string;
+      authenticator.getData(token);
+
+      const postData = {
+        user_id: req.params.user_id,
+        photo: req.body.photo,
+        description: req.body.description,
+        type: req.body.type
       };
-
-//       async createPost (req: Request, res: Response){
-//         try {
-//           const token = req.headers.authorization as string;
-//           authenticator.getData(token);
-
-//           const id = new IdGenerator();
       
-//           const postData: createPostInputDTO = {
-//             user_id: req.params.user_id,
-//             photo: req.body.photo,
-//             description: req.body.description,
-//             type: req.body.type
-//           };
-      
-              
-//           if (!postData.photo) {
-//             throw new Error("Invalid photo");
-//           }
+      if (!postData.photo) {
+        throw new Error("Invalid photo");
+      }
 
-//           if (!postData.description) {
-//             throw new Error("Invalid description");
-//           }
+      if (!postData.description) {
+        throw new Error("Invalid description");
+      }
 
-//           if (!postData.type) {
-//             throw new Error("Invalid type");
-//           }
+      if (!postData.type) {
+        throw new Error("Invalid type");
+      }
 
-//           await userBusiness.createPost(user_id, photo, description, date, type);
+      await userBusiness.createPost(postData.user_id, postData.photo, postData.description, postData.type);
       
-//           res.status(200).send({
-//             message: "Post successfuly registered",
-//           });
-//         } catch (err) {
-//           res.status(400).send({
-//             message: err.message,
-//           });
-//       }
-      
- };
+      res.status(200).send({
+        message: "Post successfuly registered",
+      });
+    } catch (err) {
+      res.status(400).send({ message: err.message });
+    }
+  };  
+}

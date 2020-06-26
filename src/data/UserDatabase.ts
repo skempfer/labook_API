@@ -83,12 +83,7 @@ export class UserDatabase extends BaseDataBase {
         }       
     }
 
-    public async createPost (
-        user_id: string,
-        photo: string,
-        description: string,
-        type: string
-    ): Promise<any> {
+    public async createPost (user_id: string,photo: string,description: string,type: string): Promise<any> {
         const post_id = this.idGenerator.generate();
         const date = new Date();
         try{
@@ -98,8 +93,8 @@ export class UserDatabase extends BaseDataBase {
                 user_id,
                 photo,
                 description,
-                type,
                 date,
+                type
             })
             .into("Labook_posts");
         }catch (err){

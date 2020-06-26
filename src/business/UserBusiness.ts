@@ -24,15 +24,8 @@ export class UserBusiness{
         await this.userDatabase.deleteFriendship(user_id, friend_id);
     }
 
-    public async createPost(
-        post_id:string,
-        user_id: string, 
-        photo: string, 
-        description: string, 
-        date: string, 
-        type: string
-    ): Promise<void>{
-        //await this.userDatabase.createPost(post_id, user_id, photo, description, date, type);
+    public async createPost(user_id: string,photo: string,description: string, type: string): Promise<void>{
+        await this.userDatabase.createPost( user_id, photo, description, type);
     }
         
 };
