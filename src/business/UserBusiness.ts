@@ -34,4 +34,12 @@ export class UserBusiness{
     public async createPost(user_id: string,photo: string,description: string, type: string): Promise<void>{
         await this.userDatabase.createPost( user_id, photo, description, type);
     };        
+
+    }        
+
+    }
+
+    public async getFeedFriendship(user_id: string): Promise<any>{
+        await this.userDatabase.getFeedFriendship(user_id);
+    }
 };

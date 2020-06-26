@@ -12,3 +12,5 @@ userRouter.post("/undofriendship", new UserController().undoFriendship);
 userRouter.post("/login", new UserController().login);
 
 userRouter.post("/createpost", new UserController().createPost);
+
+userRouter.get("/feed", new UserController().getFeedFriendship);
