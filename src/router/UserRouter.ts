@@ -7,6 +7,8 @@ userRouter.post("/signup", new UserController().signup);
 
 userRouter.post("/friendship", new UserController().createFriendship);
 
+userRouter.post("/undofriendship", new UserController().undoFriendship);
+
 userRouter.post("/login", new UserController().login);
 
 userRouter.post("/createpost", new UserController().createPost);
