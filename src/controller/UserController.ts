@@ -12,7 +12,7 @@ const hashManager = new HashManager();
 
 export class UserController {
     
-  async signup(req: Request, res: Response) {
+  async signup(req: Request, res: Response): Promise<void> {
     try {
       const userData: SignupInputDTO = {
         name: req.body.name,
@@ -33,29 +33,8 @@ export class UserController {
         res.status(400).send({ error: err.message });
       }
   }
-
-  async createFriendship(req: Request, res: Response) {
-        try {
-            const token = req.headers.authorization as string;
-
-            authenticator.getData(token);
-
-            const { user_id } = req.body;
-            const { friend_id } = req.body;
-
-          const id =  await userBusiness.createFriendship(user_id, friend_id);
-
-          authenticator.generateToken({
-              id: id                
-          });
-
-            res.status(200).send({ message: "Solicitação de amizade enviada com sucesso!" })
-        } catch(err) {
-            res.status(400).send({ error: err.message });
-        }
-  }
    
-  async login (req: Request, res: Response) {
+  async login (req: Request, res: Response): Promise<void> {
       try {
         if (!req.body.email || req.body.email.indexOf("@") === -1) {
           throw new Error("Invalid email");
@@ -66,17 +45,17 @@ export class UserController {
           password: req.body.password,
         };
     
+
         new UserDatabase();
+
         const user = await userBusiness.login(userData.email);
     
-        const hashManager = new HashManager();
         const compareResult = await hashManager.compare(userData.password, user.password);
     
         if (!compareResult) {
           throw new Error("Invalid password");
         }
     
-        const authenticator = new Authenticator();
         const token = authenticator.generateToken({
           id: user.id,
         });
@@ -91,7 +70,47 @@ export class UserController {
       }
   };
 
-  async createPost (req: Request, res: Response){
+  async createFriendship(req: Request, res: Response): Promise<void> {
+    try {
+        const token = req.headers.authorization as string;
+
+        authenticator.getData(token);
+
+        const { user_id } = req.body;
+        const { friend_id } = req.body;
+
+      const id =  await userBusiness.createFriendship(user_id, friend_id);
+
+      authenticator.generateToken({
+          id: id                
+      });
+
+        res.status(200).send({ message: "Friendship request sent successfully!" })
+    } catch(err) {
+        res.status(400).send({ error: err.message });
+    }
+}
+
+async undoFriendship(req: Request, res: Response): Promise<void> {
+  try{
+    const token = req.headers.authorization as string;
+  
+    const { friend_id } = req.body;
+
+   const user = authenticator.getData(token);
+  
+    await userBusiness.deleteFriendship(
+      user.id, 
+      friend_id
+    );
+
+    res.status(200).send({ message: "Friendship successfully undone!" })
+  } catch(err) {
+    res.status(400).send({ message: err.message });
+  }
+}
+
+  async createPost (req: Request, res: Response): Promise<void> {
     try {
       
       const token = req.headers.authorization as string;
