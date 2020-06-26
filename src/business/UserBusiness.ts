@@ -33,5 +33,5 @@ export class UserBusiness{
 
     public async createPost(user_id: string,photo: string,description: string, type: string): Promise<void>{
         await this.userDatabase.createPost( user_id, photo, description, type);
-    }        
+    };        
 };
