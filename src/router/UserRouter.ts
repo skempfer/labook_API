@@ -10,3 +10,5 @@ userRouter.post("/friendship", new UserController().createFriendship);
 userRouter.post("/login", new UserController().login);
 
 userRouter.post("/createpost", new UserController().createPost);
+
+userRouter.get("/feed", new UserController().getFeedFriendship);

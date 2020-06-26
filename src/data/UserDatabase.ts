@@ -111,6 +111,23 @@ export class UserDatabase extends BaseDataBase {
         }
     }
 
+    public async getFeedFriendship (user_id: string): Promise<any[]> {
+        try{
+            const result = await this.getConnection().raw(`
+            SELECT post_id, photo, description, date, friend_id, name
+            FROM Labook_posts
+            JOIN Labook_friendship
+            ON Labook_posts.user_id = Labook_friendship.friend_id
+            JOIN Labook_users
+            ON Labook_posts.user_id = friend_id
+            WHERE friend_id = "${user_id}";
+            `);
+            return result[0];
+        }catch (err){
+            throw new Error(err.message);
+        }
+    }
+
 
 
 
