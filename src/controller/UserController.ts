@@ -105,7 +105,6 @@ async undoFriendship(req: Request, res: Response): Promise<void> {
   } catch(err) {
     res.status(400).send({ message: err.message });
   }
- 
 }
 
   async createPost (req: Request, res: Response): Promise<void> {
