@@ -52,7 +52,7 @@ export class UserDatabase extends BaseDataBase {
         }
     }
 
-    public async friendship( user_id: string,  friend_id: string) {
+    public async createFriendship( user_id: string,  friend_id: string) {
         try {
             const friendship_id = this.idGenerator.generate();
 
@@ -70,6 +70,15 @@ export class UserDatabase extends BaseDataBase {
             throw new Error(err.message)
         }
     }
+
+    public async getFriendById(user_id: string):Promise<any>{
+        const result = await this.getConnection()
+        .select ("friend_id")
+        .from("Labook_friendship")
+        .where ({ user_id: user_id})
+    
+        return result
+      }
 
 
     public async deleteFriendship(user_id: string,  friend_id: string): Promise<void> {

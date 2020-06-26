@@ -34,7 +34,7 @@ export class UserController {
       }
   }
 
-  async friendship(req: Request, res: Response) {
+  async createFriendship(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string;
 
@@ -43,7 +43,7 @@ export class UserController {
             const { user_id } = req.body;
             const { friend_id } = req.body;
 
-          const id =  await userBusiness.friendship(user_id, friend_id);
+          const id =  await userBusiness.createFriendship(user_id, friend_id);
 
           authenticator.generateToken({
               id: id                
@@ -106,7 +106,7 @@ export class UserController {
         user_id
       };      
       
-      await userBusiness.createPost(postData.photo, postData.description, postData.type, postData.user_id,);
+      await userBusiness.createPost(postData.photo, postData.description, postData.type, postData.user_id);
       
       res.status(200).send({
         message: "Post successfuly registered",

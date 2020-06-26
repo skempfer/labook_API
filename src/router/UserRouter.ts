@@ -5,7 +5,7 @@ export const userRouter = express.Router();
 
 userRouter.post("/signup", new UserController().signup);
 
-userRouter.post("/friendship/:id", new UserController().friendship);
+userRouter.post("/friendship", new UserController().createFriendship);
 
 userRouter.post("/login", new UserController().login);
 
