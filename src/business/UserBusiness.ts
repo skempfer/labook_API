@@ -11,9 +11,16 @@ export class UserBusiness{
         return id;
     }
 
-    public async friendship(user_id: string, friend_id: string): Promise<any> {
-        const id = this.idGenerator.generate();
-       return await this.userDatabase.friendship( user_id, friend_id);
+    public async createFriendship(user_id: string, friend_id: string): Promise<any> {
+        const userFriends = await this.userDatabase.getFriendById(user_id);
+
+        for (let i = 0; i < userFriends.length; i++) {
+            if (userFriends[i].friend_id === friend_id) {
+              throw new Error("You are already friends");
+            }
+          }
+
+       return await this.userDatabase.createFriendship( user_id, friend_id);
     }
 
     public async login(email: string): Promise<any> {
