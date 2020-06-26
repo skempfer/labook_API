@@ -47,10 +47,14 @@ export class UserController {
 
             authenticator.getData(token);
 
-            const { user_id } = req.params;
+            const { user_id } = req.body;
             const { friend_id } = req.body;
 
-            await userBusiness.friendship(user_id, friend_id);
+          const id =  await userBusiness.friendship(user_id, friend_id);
+
+          authenticator.generateToken({
+              id: id                
+          });
 
             res.status(200).send({ message: "Solicitação de amizade enviada com sucesso!" })
         } catch(err) {
