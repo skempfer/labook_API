@@ -114,5 +114,21 @@ export class UserController {
     } catch (err) {
       res.status(400).send({ message: err.message });
     }
-  };  
+  }; 
+  
+  async getFeedFriendship(req: Request, res: Response) {
+    const userBusiness: UserBusiness = new UserBusiness();
+
+    const token = req.headers.authorization as string;
+    const idData = authenticator.getData(token);
+    const user_id = idData.id;
+
+    try {
+        const result = await userBusiness.getFeedFriendship(user_id);
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({ error: err.message });
+    }
+
+}
 }
