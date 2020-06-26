@@ -84,7 +84,6 @@ export class UserDatabase extends BaseDataBase {
                 DELETE FROM Labook_friendship
                 WHERE user_id = "${user_id}"
                 AND friend_id = "${friend_id}"
-                
             `)           
         }catch (err) {
             throw new Error(err.message)
