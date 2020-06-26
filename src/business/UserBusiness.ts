@@ -38,5 +38,9 @@ export class UserBusiness{
     public async getFeedFriendship(user_id: string): Promise<any>{
         await this.userDatabase.getFeedFriendship(user_id);
     }
+
+    async getFeedByType(postsType: string) {
+        return await new UserDatabase().getFeedByType(postsType);
+    }
         
 };
