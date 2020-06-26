@@ -26,7 +26,6 @@ export class UserDatabase extends BaseDataBase {
             }
     }
 
-
     public async getUserByEmail(email: string): Promise<any> {
         try{
             const result = await this.getConnection()
@@ -37,8 +36,7 @@ export class UserDatabase extends BaseDataBase {
         }catch (err){
             throw new Error(err.message)
         }
-    }
-        
+    }  
 
     public async getUserById(user_id: string) {
         try {
@@ -80,12 +78,12 @@ export class UserDatabase extends BaseDataBase {
         return result
       }
 
-
     public async deleteFriendship(user_id: string,  friend_id: string): Promise<void> {
         try{
             await this.getConnection().raw(`
                 DELETE FROM Labook_friendship
-                WHERE "${user_id}" AND "${friend_id}"
+                WHERE user_id = "${user_id}"
+                AND friend_id = "${friend_id}"
             `)           
         }catch (err) {
             throw new Error(err.message)
@@ -111,6 +109,7 @@ export class UserDatabase extends BaseDataBase {
         }
     }
 
+
     public async getFeedFriendship (user_id: string): Promise<any[]> {
         try{
             const result = await this.getConnection().raw(`
@@ -127,12 +126,4 @@ export class UserDatabase extends BaseDataBase {
             throw new Error(err.message);
         }
     }
-
-
-
-
-
 };
-
-
-
