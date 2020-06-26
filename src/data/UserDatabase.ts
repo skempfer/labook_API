@@ -108,5 +108,4 @@ export class UserDatabase extends BaseDataBase {
             throw new Error(err.message)
         }
     }
-
 };
