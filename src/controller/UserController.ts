@@ -66,7 +66,7 @@ export class UserController {
           password: req.body.password,
         };
     
-        const userDatabase = new UserDatabase();
+        new UserDatabase();
         const user = await userBusiness.login(userData.email);
     
         const hashManager = new HashManager();
