@@ -29,7 +29,7 @@ export class UserBusiness{
 
     public async deleteFriendship(user_id: string, friend_id: string): Promise<any>{
          await this.userDatabase.deleteFriendship(user_id, friend_id);
-    }
+    };
 
     public async createPost(user_id: string,photo: string,description: string, type: string): Promise<void>{
         await this.userDatabase.createPost( user_id, photo, description, type);
