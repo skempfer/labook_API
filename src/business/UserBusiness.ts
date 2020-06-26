@@ -21,7 +21,7 @@ export class UserBusiness{
           }
 
        return await this.userDatabase.createFriendship( user_id, friend_id);
-    }
+    };
 
     public async login(email: string): Promise<any> {
          await this.userDatabase.getUserByEmail(email);
