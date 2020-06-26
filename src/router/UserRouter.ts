@@ -14,3 +14,5 @@ userRouter.post("/login", new UserController().login);
 userRouter.post("/createpost", new UserController().createPost);
 
 userRouter.get("/feed", new UserController().getFeedFriendship);
+
+userRouter.get("feed/type", new UserController().getFeedByType);

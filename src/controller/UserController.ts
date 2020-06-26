@@ -112,8 +112,7 @@ async undoFriendship(req: Request, res: Response): Promise<void> {
 
   async createPost (req: Request, res: Response): Promise<void> {
     try {
-      // const token = req.headers.authorization as string;
-      // authenticator.getData(token);
+      
       const token = req.headers.authorization as string;
       const idData = authenticator.getData(token);
       const user_id = idData.id;
@@ -147,6 +146,19 @@ async undoFriendship(req: Request, res: Response): Promise<void> {
         res.status(200).send(result);
     } catch (err) {
         res.status(400).send({ error: err.message });
+    }
+  }
+
+  async getFeedByType(req: Request, res: Response) {
+
+    try {
+        const postType = req.body.postType as string;
+
+        const result = await new UserBusiness().getFeedByType(postType);
+        
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({ error: err.message })
     }
 
 }
