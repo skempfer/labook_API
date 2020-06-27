@@ -89,77 +89,24 @@ export class UserController {
     } catch(err) {
         res.status(400).send({ error: err.message });
     }
-}
-
-async undoFriendship(req: Request, res: Response): Promise<void> {
-  try{
-    const token = req.headers.authorization as string;
-  
-    const { friend_id } = req.body;
-
-   const user = authenticator.getData(token);
-  
-    await userBusiness.deleteFriendship(
-      user.id, 
-      friend_id
-    );
-
-    res.status(200).send({ message: "Friendship successfully undone!" })
-  } catch(err) {
-    res.status(400).send({ message: err.message });
   }
-}
 
-  async createPost (req: Request, res: Response): Promise<void> {
-    try {
-      
+  async undoFriendship(req: Request, res: Response): Promise<void> {
+    try{
       const token = req.headers.authorization as string;
-      const idData = authenticator.getData(token);
-      const user_id = idData.id;
+    
+      const { friend_id } = req.body;
 
-      const postData = {
-        photo: req.body.photo,
-        description: req.body.description,
-        type: req.body.type,
-        user_id
-      };      
-      
-      await userBusiness.createPost(postData.photo, postData.description, postData.type, postData.user_id);
-      
-      res.status(200).send({
-        message: "Post successfuly registered",
-      });
-    } catch (err) {
+      const user = authenticator.getData(token);
+    
+      await userBusiness.deleteFriendship(
+        user.id, 
+        friend_id
+      );
+
+      res.status(200).send({ message: "Friendship successfully undone!" })
+    } catch(err) {
       res.status(400).send({ message: err.message });
     }
-  }; 
-  
-  async getFeedFriendship(req: Request, res: Response) {
-    const userBusiness: UserBusiness = new UserBusiness();
-
-    const token = req.headers.authorization as string;
-    const idData = authenticator.getData(token);
-    const user_id = idData.id;
-
-    try {
-        const result = await userBusiness.getFeedFriendship(user_id);
-        res.status(200).send(result);
-    } catch (err) {
-        res.status(400).send({ error: err.message });
-    }
   }
-
-  async getFeedByType(req: Request, res: Response) {
-
-    try {
-        const postType = req.body.postType as string;
-
-        const result = await new UserBusiness().getFeedByType(postType);
-        
-        res.status(200).send(result);
-    } catch (err) {
-        res.status(400).send({ error: err.message })
-    }
-
-}
 }

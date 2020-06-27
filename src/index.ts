@@ -2,12 +2,15 @@ import express, { Request, Response } from "express";
 import { AddressInfo } from "net";
 import dotenv from "dotenv";
 import { userRouter } from "./router/UserRouter";
+import { postRouter } from "./router/PostRouter";
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
 app.use("/", userRouter);
+app.post("/", postRouter);
+
 
 const server = app.listen(process.env.PORT || 3000, () => {
   if (server) {
