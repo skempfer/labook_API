@@ -1,8 +1,8 @@
 import express from "express";
-import { UserController } from "../controller/UserController";
+import { PostController } from "../controller/PostController";
 
 export const postRouter = express.Router();
 
-postRouter.post("/createpost", new UserController().createPost);
-postRouter.get("/feed", new UserController().getFeedFriendship);
-postRouter.get("feed/type", new UserController().getFeedByType);
+postRouter.post("/createpost", new PostController().createPost);
+postRouter.get("/feed", new PostController().getFeedFriendship);
+postRouter.get("feed/type", new PostController().getFeedByType);
