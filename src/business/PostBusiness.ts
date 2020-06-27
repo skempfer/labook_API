@@ -1,8 +1,8 @@
-import { PostDataBase } from "../data/PostDataBase";
+import { PostDatabase } from "../data/PostDataBase";
 
 
 export class PostBusiness{
-    private postDatabase = new PostDataBase();
+    private postDatabase = new PostDatabase();
     
     public async createPost(user_id: string,photo: string,description: string, type: string): Promise<void>{
         await this.postDatabase.createPost( user_id, photo, description, type);
