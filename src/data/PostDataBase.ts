@@ -27,7 +27,7 @@ export class PostDatabase extends BaseDataBase{
         }
     }
 
-    public async getFeed (user_id: string): Promise<any[]> {
+    public async getFeedAndPage (friend_id: string, usersPerPage: number, offset: number): Promise<any[]> {
         try{
             const result = await this.getConnection().raw(`
             SELECT post_id, photo, description, date, type, friend_id, name
@@ -36,7 +36,10 @@ export class PostDatabase extends BaseDataBase{
             ON Labook_posts.user_id = Labook_friendship.friend_id
             JOIN Labook_users
             ON Labook_posts.user_id = friend_id
-            WHERE friend_id = "${user_id}";
+            WHERE friend_id = "${friend_id}"
+            ORDER BY date DESC
+            LIMIT "${usersPerPage}"
+            OFFSET "${offset}";
             `);
             return result[0];
         }catch (err){
@@ -44,7 +47,7 @@ export class PostDatabase extends BaseDataBase{
         }
     }
 
-    public async getFeedByTypeAndPage (postType: string, usersPerPage: number, offset: number): Promise<any[]>{
+    public async getFeedByTypeAndPage ( friend_id: string, postType: string, usersPerPage: number, offset: number): Promise<any[]>{
         try{
             const result = await this.getConnection().raw(`
                 SELECT post_id, photo, description, date, type, friend_id, name
@@ -53,6 +56,7 @@ export class PostDatabase extends BaseDataBase{
                 ON Labook_posts.user_id = Labook_friendship.friend_id
                 JOIN Labook_users
                 ON Labook_posts.user_id = friend_id
+                WHERE friend_id = "${friend_id}" AND
                 WHERE type = "${postType}"
                 ORDER BY date DESC
                 LIMIT "${usersPerPage}"
