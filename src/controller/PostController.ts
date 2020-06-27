@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
-import { UserBusiness } from "../business/UserBusiness";
+import { PostBusiness } from "../business/PostBusiness";
 import { HashManager } from "../services/HashManager";
 import { Authenticator } from "../services/Authenticator";
-import { postInputDTO} from "../dto/PostDTO";
-import { UserDatabase } from "../data/UserDatabase";
+import { PostDatabase } from "../data/PostDataBase";
 
-const userBusiness: UserBusiness = new UserBusiness();
+const postBusiness: PostBusiness = new PostBusiness();
 const authenticator = new Authenticator();
-const userDatabase = new UserDatabase();
+const postDatabase = new PostDatabase();
 const hashManager = new HashManager();
 
 export class PostController {
@@ -25,7 +24,7 @@ export class PostController {
             user_id
             };      
           
-            await userBusiness.createPost(postData.photo, postData.description, postData.type, postData.user_id);
+            await postBusiness.createPost(postData.photo, postData.description, postData.type, postData.user_id);
           
             res.status(200).send({
            message: "Post successfuly registered",
@@ -35,15 +34,15 @@ export class PostController {
         }
     }; 
       
-    async getFeedFriendship(req: Request, res: Response) {
-        const userBusiness: UserBusiness = new UserBusiness();
+    async getFeed(req: Request, res: Response) {
+        const postBusiness: PostBusiness = new PostBusiness();
     
         const token = req.headers.authorization as string;
         const idData = authenticator.getData(token);
         const user_id = idData.id;
     
         try {
-            const result = await userBusiness.getFeedFriendship(user_id);
+            const result = await postBusiness.getFeed(user_id);
             res.status(200).send(result);
         } catch (err) {
             res.status(400).send({ error: err.message });
@@ -55,7 +54,7 @@ export class PostController {
         try {
             const postType = req.body.postType as string;
     
-            const result = await new UserBusiness().getFeedByType(postType);
+            const result = await postBusiness.getFeedByType(postType);
             
             res.status(200).send(result);
         } catch (err) {

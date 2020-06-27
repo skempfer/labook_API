@@ -35,8 +35,8 @@ export class UserBusiness{
         await this.userDatabase.createPost( user_id, photo, description, type);
     };        
 
-    public async getFeedFriendship(user_id: string): Promise<any>{
-        await this.userDatabase.getFeedFriendship(user_id);
+    public async getFeed(user_id: string): Promise<any>{
+        await this.userDatabase.getFeed(user_id);
     }
 
     async getFeedByType(postsType: string) {
