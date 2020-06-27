@@ -1,4 +1,4 @@
-# Labook API
+# Labook API   :rocket:
 
 Esta API foi escrita para ser utilizada como rede social, tendo como funcionalidades básicas:
 * signup;
@@ -9,17 +9,17 @@ Esta API foi escrita para ser utilizada como rede social, tendo como funcionalid
 * getFeed;
 * getFeedByType
 
-## Como começar:
+## Como começar:  :star:
 
 Você pode utilizar a documentação oficial: 
 
 [Postman](https://documenter.getpostman.com/view/10904449/T17AiqSG?version=latest)
 
-### Pré-requisitos:
+### Pré-requisitos: :triangular_flag_on_post:
 
 A versão atual não necessita de pré-requisitos.
 
-### Instalando: 
+### Instalando: :heavy_check_mark:
 
 Abra o terminal e digite o comando a seguir para clonar o repositório:
 ```
@@ -30,7 +30,7 @@ Abra a pasta do clone do repositório pelo terminal e digite:
 npm install
 ```
 
-## Construído com: 
+## Construído com: :wrench:
 
 * [Knex](http://knexjs.org/)
 * [Typescript](https://www.typescriptlang.org/)  
@@ -43,7 +43,7 @@ npm install
 * [ts-node](https://www.npmjs.com/package/ts-node?activeTab=readme)
 e suas versões @type
 
-## Desenvolvedoras:
+## Desenvolvedoras:  :computer:  :woman:
 
 * **Milene Taborda** - [GitHub](https://github.com/milenetaborda) - [Linkedin](https://www.linkedin.com/in/milene-taborda/)
 * **Shana Kempfer** - [GitHub](https://github.com/skempfer) - [Linkedin](https://www.linkedin.com/in/shana-kempfer-9231a1145/)
