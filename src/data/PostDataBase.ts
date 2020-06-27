@@ -1,5 +1,6 @@
 import { BaseDataBase } from "./BaseDatabase";
 import { IdGenerator } from "../services/IdGenerator";
+import { Post } from "../models/Post";
 
 export class PostDatabase extends BaseDataBase{
 
@@ -54,8 +55,18 @@ export class PostDatabase extends BaseDataBase{
                 WHERE type = "${postType}"
                 ORDER BY date DESC;
             `);
-            return result[0];
-                
+                        
+            const postArray: Post[] = [];
+
+            if(result){
+                for (const post of result){
+                    const newPost = new post(post.id, post.name, post.photo, post.description, post.type );
+                    postArray.push(newPost);
+                }
+                return postArray;
+            }else{
+                return postArray;
+            }
             
         }catch (err){
             throw new Error(err.message);
