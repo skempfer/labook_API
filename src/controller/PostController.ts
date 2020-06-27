@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { PostBusiness } from "../business/PostBusiness";
-import { HashManager } from "../services/HashManager";
 import { Authenticator } from "../services/Authenticator";
-import { PostDatabase } from "../data/PostDataBase";
+import { UserOrderInputDTO } from "../dto/PostDTO";
 
 const postBusiness: PostBusiness = new PostBusiness();
 const authenticator = new Authenticator();
-const postDatabase = new PostDatabase();
-const hashManager = new HashManager();
+
 
 export class PostController {
     
@@ -49,12 +47,18 @@ export class PostController {
         }
     }
     
-    async getFeedByType(req: Request, res: Response) {
+    async getFeedByTypeAndPage(req: Request, res: Response) {
     
         try {
             const postType = req.body.postType as string;
+            const order: UserOrderInputDTO = {type: "ASC"}
+            const page: number = Number(req.body.page) >= 1 ? Number(req.body.page): 1;
     
-            const result = await postBusiness.getFeedByType(postType);
+            if(req.body.orderType === "DESC"){
+                order.type = req.body.orderType;
+            }
+
+            const result = await postBusiness.getFeedByTypeAndPage(postType, page);
             
             res.status(200).send(result);
         } catch (err) {

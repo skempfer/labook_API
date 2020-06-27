@@ -1,4 +1,5 @@
 import { PostDatabase } from "../data/PostDataBase";
+import { UserOrderInputDTO } from "../dto/PostDTO";
 
 
 export class PostBusiness{
@@ -12,8 +13,10 @@ export class PostBusiness{
         await this.postDatabase.getFeed(user_id);
     }
 
-    async getFeedByType(postsType: string) {
-        await this.postDatabase.getFeedByType(postsType);
+    async getFeedByTypeAndPage(postsType: string, page: number) {
+        const postPerPage = 5;
+        let offset = postPerPage * (page - 1);
+        return await this.postDatabase.getFeedByTypeAndPage(postsType, postPerPage, offset);
     }
         
 };

@@ -1,6 +1,7 @@
 import { BaseDataBase } from "./BaseDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { Post } from "../models/Post";
+import { UserOrderInputDTO } from "../dto/PostDTO";
 
 export class PostDatabase extends BaseDataBase{
 
@@ -43,7 +44,7 @@ export class PostDatabase extends BaseDataBase{
         }
     }
 
-    public async getFeedByType (postType: string): Promise<any[]>{
+    public async getFeedByTypeAndPage (postType: string, usersPerPage: number, offset: number): Promise<any[]>{
         try{
             const result = await this.getConnection().raw(`
                 SELECT post_id, photo, description, date, type, friend_id, name
@@ -53,7 +54,9 @@ export class PostDatabase extends BaseDataBase{
                 JOIN Labook_users
                 ON Labook_posts.user_id = friend_id
                 WHERE type = "${postType}"
-                ORDER BY date DESC;
+                ORDER BY date DESC
+                LIMIT "${usersPerPage}"
+                OFFSET "${offset}";
             `);
                         
             const postArray: Post[] = [];
