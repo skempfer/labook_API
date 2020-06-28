@@ -7,7 +7,7 @@ Esta API foi escrita para ser utilizada como rede social, tendo como funcionalid
 * undoFriendship - permite desfazer o relação de "amizade" entre usuários;
 * createPost - cria post com a possibilidade de incluir foto e descrição;
 * getFeedAndPage - retorna o feed paginado com os pots dos usuários que tem relação de "amizade";
-* getFeedByTypeAndPage - retorna o feed paginado com os posts dos usuários que tem relação de amizade e filtrados pos type;
+* getFeedByTypeAndPage - retorna o feed paginado com os posts dos usuários que tem relação de amizade e filtrados por type;
 * likePost - Possibilidade de curtir posts;
 * dislikePost - Possibilidade de descurtir posts;
 * commentPost - Possibilidade de incluir comentários ao post dos usuários que tem relação de "amizade";
