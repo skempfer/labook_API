@@ -3,7 +3,7 @@ import { IdGenerator } from "../services/IdGenerator";
 import { Post } from "../models/Post";
 import { UserOrderInputDTO } from "../dto/PostDTO";
 
-export class PostDatabase extends BaseDataBase{
+export class PostDataBase extends BaseDataBase{
 
     static TABLE_NAME: string = "Labook_posts";
     private idGenerator = new IdGenerator();
@@ -31,72 +31,67 @@ export class PostDatabase extends BaseDataBase{
         try{
             const result = await this.getConnection().raw(`
                 SELECT Labook_users.name, Labook_posts.date, Labook_posts.description, Labook_posts.photo
-                // FROM Labook_posts
-                // JOIN Labook_users
-                // ON Labook_posts.user_id = Labook_users.user_id
-                // WHERE Labook_posts.user_id IN (
-                // SELECT friend_id 
-                // FROM Labook_friendship
-                // WHERE user_id = "${user_id}")
-                // OR Labook_posts.user_id IN (
-                // SELECT friend_id 
-                // FROM Labook_friendship
-                // WHERE friend_id = "${user_id}")
-                // ORDER BY Labook_posts.date DESC
-                //LIMIT "${usersPerPage}"
-                //OFFSET "${offset}";
+                FROM Labook_posts
+                JOIN Labook_users
+                ON Labook_posts.user_id = Labook_users.user_id
+                WHERE Labook_posts.user_id IN (
+                SELECT friend_id 
+                FROM Labook_friendship
+                WHERE user_id = "${user_id}")
+                OR Labook_posts.user_id IN (
+                SELECT friend_id 
+                FROM Labook_friendship
+                WHERE friend_id = "${user_id}")
+                ORDER BY Labook_posts.date DESC
+                LIMIT "${usersPerPage}"
+                OFFSET "${offset}";
             `);
 
-            // 
             return result[0];
         }catch (err){
             throw new Error(err.message);
         }
     }
 
-    public async getFeedByTypeAndPage ( friend_id: string, postType: string, usersPerPage: number, offset: number): Promise<any[]>{
+    public async getFeedByTypeAndPage (user_id: string, postType: string, usersPerPage: number, offset: number): Promise<any[]>{
         try{
             const result = await this.getConnection().raw(`
-                SELECT post_id, photo, description, date, type, friend_id, name
-                FROM Labook_posts
-                JOIN Labook_friendship
-                ON Labook_posts.user_id = Labook_friendship.friend_id
-                JOIN Labook_users
-                ON Labook_posts.user_id = friend_id
-                WHERE friend_id = "${friend_id}" AND
-                WHERE type = "${postType}"
-                ORDER BY date DESC
-                LIMIT "${usersPerPage}"
-                OFFSET "${offset}";
+            SELECT Labook_users.name, Labook_posts.date, Labook_posts.description, Labook_posts.photo
+            FROM Labook_posts
+            JOIN Labook_users
+            ON (Labook_posts.user_id = Labook_users.user_id
+            AND Labbok_posts.type = "${postType}")
+            WHERE Labook_posts.user_id IN (
+            SELECT friend_id 
+            FROM Labook_friendship
+            WHERE user_id = "${user_id}")
+            OR Labook_posts.user_id IN (
+            SELECT friend_id 
+            FROM Labook_friendship
+            WHERE friend_id = "${user_id}")
+            ORDER BY Labook_posts.date DESC
+            LIMIT "${usersPerPage}"
+            OFFSET "${offset}";
             `);
 
-                // SELECT LabookUsers.name, LaPosts.createdAt, LaPosts.description, LaPosts.photo, LaPosts.type
-                // FROM LaPosts
-                // JOIN LabookUsers
-                // ON (LaPosts.createdBy = LabookUsers.id
-                // AND LaPosts.type = "${postType}")
-                // WHERE LaPosts.createdBy IN (
-                // SELECT res_friend 
-                // FROM LaFriends
-                // WHERE req_friend = "${id}")
-                // OR LaPosts.createdBy IN (
-                // SELECT req_friend 
-                // FROM LaFriends
-                // WHERE res_friend = "${id}")
-                // ORDER BY LaPosts.createdAt DESC;
-                        
             const postArray: Post[] = [];
 
             if(result){
                 for (const post of result[0]){
-                    const newPost = new post(post.id, post.name, post.photo, post.description, post.type );
+                    const newPost = new post(
+                        post.name, 
+                        post.date,
+                        post.description, 
+                        post.photo,
+                        post.mapStringToPostType(post.type) 
+                    );
                     postArray.push(newPost);
                 }
                 return postArray;
             }else{
                 return postArray;
             }
-            
+
         }catch (err){
             throw new Error(err.message);
         }

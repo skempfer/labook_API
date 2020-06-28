@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import { PostBusiness } from "../business/PostBusiness";
 import { Authenticator } from "../services/Authenticator";
-import { BaseDatabase } from "../data/BaseDatabase";
-
+import { BaseDataBase } from "../data/BaseDatabase";
 
 const postBusiness: PostBusiness = new PostBusiness();
 const authenticator = new Authenticator();
-
 
 export class PostController {
     
@@ -31,58 +29,39 @@ export class PostController {
         } catch (err) {
             res.status(400).send({ message: err.message });
         }
+        await BaseDataBase.destroyConnection();
     }; 
       
-    async getFeedAndPage(req: Request, res: Response) {
-        
-        try {
+    async getFeedAndPage(req: Request, res: Response) {        
+      try {            
+        const token = req.headers.authorization as string;
+        const idData = authenticator.getData(token);
+        const user_id = idData.id;
+        const page: number = Number(req.query.page) >= 1 ? Number(req.query.page): 1;
             
-            const token = req.headers.authorization as string;
-            authenticator.getData(token);       
-            const friend_id = req.body.friend_id;
-            const page: number = Number(req.body.page) >= 1 ? Number(req.body.page): 1;
-            
-            const result = await postBusiness.getFeedAndPage(friend_id, page );
-            res.status(200).send(result);
-        } catch (err) {
-            res.status(400).send({ error: err.message });
-        }
-    }
+        const result = await postBusiness.getFeedAndPage(user_id, page );
+          
+        res.status(200).send(result);
+      }catch (err) {
+        res.status(400).send({ error: err.message });
+      };
+      await BaseDataBase.destroyConnection();
+    };
 
-    // async getPosts(req: Request, res: Response) {
-    //   try {
-    //     const token = req.headers.authorization as string;
-    //     const idData = auth.getData(token);
-    //     const tokenId = idData.id;
-  
-    //     const posts = await postBusiness.getPosts(tokenId);
-  
-    //     res.status(200).send({
-    //       posts,
-    //     });
-    //   } catch (err) {
-    //     res.status(400).send({
-    //       message: err.message,
-    //     });
-    //   }
-    //   await BaseDatabase.destroyConnection();
-    // }
-    
     async getFeedByTypeAndPage(req: Request, res: Response) {
-    
-        try {
-            const token = req.headers.authorization as string;
-            authenticator.getData(token);
-            const postType = req.body.postType as string;
-            const page: number = Number(req.body.page) >= 1 ? Number(req.body.page): 1;
-            const friend_id = req.body.friend_id;
-    
-            const result = await postBusiness.getFeedByTypeAndPage(friend_id, postType, page);
+      try {
+        const token = req.headers.authorization as string;
+        const idData = authenticator.getData(token);
+        const user_id = idData.id;
+        const postType = req.query.postType as string;
+        const page: number = Number(req.query.page) >= 1 ? Number(req.query.page): 1;
+        
+        const result = await postBusiness.getFeedByTypeAndPage(user_id, postType, page);
             
-            res.status(200).send(result);
-        } catch (err) {
-            res.status(400).send({ error: err.message })
-        }
+          res.status(200).send(result);
+      }catch (err) {
+        res.status(400).send({ error: err.message })
+      }
     }
 
     //////////////////////////////////////////////////////////
