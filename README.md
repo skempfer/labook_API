@@ -1,19 +1,22 @@
 # Labook API   :rocket:
 
 Esta API foi escrita para ser utilizada como rede social, tendo como funcionalidades básicas:
-* signup;
-* login;
-* createFriendship;
-* undoFriendship;
-* createPost;
-* getFeed;
-* getFeedByType
+* signup - criação de novos usuários;
+* login - autenticação do usuário;
+* createFriendship - permite a criação de relacionamento "amizade" entre usuários;
+* undoFriendship - permite desfazer o relação de "amizade" entre usuários;
+* createPost - cria post com a possibilidade de incluir foto e descrição;
+* getFeedAndPage - retorna o feed paginado com os pots dos usuários que tem relação de "amizade";
+* getFeedByTypeAndPage - retorna o feed paginado com os posts dos usuários que tem relação de amizade e filtrados pos type;
+* likePost - Possibilidade de curtir posts;
+* dislikePost - Possibilidade de descurtir posts;
+* commentPost - Possibilidade de incluir comentários ao post dos usuários que tem relação de "amizade";
 
 ## Como começar:  :star:
 
 Você pode utilizar a documentação oficial: 
 
-[Postman](https://documenter.getpostman.com/view/10904449/T17AiqSG?version=latest)
+* [Postman](https://explore.postman.com/templates/10027/doc-api---labook)
 
 ### Pré-requisitos: :triangular_flag_on_post:
 
