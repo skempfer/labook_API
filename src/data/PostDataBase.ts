@@ -99,32 +99,33 @@ export class PostDataBase extends BaseDataBase{
 
     //////////////////////////////////////////
 
-    // public async isLiked(postId: string, userId: string): Promise<any> {
-    //     const result = await this.getConnection()
-    //       .select("*")
-    //       .from("LaBookLikes")
-    //       .where({ postId, likedBy: userId });
+    public async isLiked(user_id: string, post_id: string): Promise<any> {
+        const result = await this.getConnection()
+          .select("*")
+          .from("Labook_likes")
+          .where({ post_id, liked_by: user_id });
     
-    //     return result[0];
-    //   }
+        return result[0];
+      }
     
-    //   public async searchPost(postId: string): Promise<any> {
-    //     const result = await this.getConnection()
-    //       .select("*")
-    //       .from("LaPosts")
-    //       .where({ id: postId });
+    public async searchPost(post_id: string): Promise<any> {
+        const result = await this.getConnection()
+          .select("*")
+          .from("Labook_posts")
+          .where({ post_id: post_id });
     
-    //     return result[0];
-    //   }
+        return result[0];
+    }
     
-    //   public async likePost(postId: string, userId: string): Promise<void> {
-    //     await this.getConnection()
-    //       .insert({
-    //         postId,
-    //         likedBy: userId,
-    //       })
-    //       .into("LaBookLikes");
-    //   }
+    public async likePost(user_id: string, post_id: string): Promise<void> {
+        await this.getConnection()
+          .insert({
+            post_id,
+            liked_by: user_id,
+           })
+          .into("Labook_likes");
+    }
+
     //   public async dislikePost(postId: string, userId: string): Promise<void> {
     //     await this.getConnection()
     //       .del()

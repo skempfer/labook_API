@@ -67,104 +67,107 @@ export class PostController {
     //////////////////////////////////////////////////////////
 
     async likePost(req: Request, res: Response) {
-        try {
-          const token = req.headers.authorization!;
-          const id = auth.getData(token).id;
-          const { postId } = req.params;
+      try {
+        const token = req.headers.authorization as string;
+        const idData = authenticator.getData(token);
+        const user_id = idData.id;
+        const { post_id } = req.params;
     
-          if (!postId) {
-            throw new Error("Invalid Post ID");
-          }
-    
-          const searchPost = await postBusiness.searchPost(postId);
-    
-          if (!searchPost) {
-            throw new Error("Post doesn't exist");
-          }
-    
-          const isLiked = await postBusiness.isLiked(postId, id);
-    
-          if (isLiked) {
-            throw new Error("You already liked this post");
-          }
-    
-          await postBusiness.likePost(postId, id);
-    
-          res.status(200).send({
-            message: "Post Liked",
-          });
-        } catch (err) {
-          res.status(400).send({
-            message: err.message,
-          });
+        if (!post_id) {
+          throw new Error("Invalid Post ID");
         }
-        await BaseDatabase.destroyConnection();
-      }
-      async dislikePost(req: Request, res: Response) {
     
-        try {
-          const token = req.headers.authorization!;
-          const id = auth.getData(token).id;
+        const searchPost = await postBusiness.searchPost(post_id);
     
-          const { postId } = req.params;
-    
-          if (!postId) {
-            throw new Error("Invalid Post ID");
-          }
-    
-          const searchPost = await postBusiness.searchPost(postId);
-    
-          if (!searchPost) {
-            throw new Error("Post doesn't exist");
-          }
-    
-          const isLiked = await postBusiness.isLiked(postId, id);
-    
-          if (!isLiked) {
-            throw new Error("You didn't like this post");
-          }
-    
-          await postBusiness.dislikePost(postId, id);
-    
-          res.status(200).send({
-            message: "Post disliked",
-          });
-    
-        } catch (err) {
-          res.status(400).send({
-            message: err.message,
-          });
+        if (!searchPost) {
+          throw new Error("Post doesn't exist");
         }
-        await BaseDatabase.destroyConnection();
-      }
     
-      async comment(req: Request, res: Response) {
-        try {
-          const token = req.headers.authorization!;
-          const authorId = auth.getData(token).id;
-          const { comment } = req.body;
-          const { postId } = req.params;
+        const isLiked = await postBusiness.isLiked(post_id, user_id);
     
-          if (!postId) {
-            throw new Error("Invalid Post ID");
-          }
-    
-          const searchPost = await postBusiness.searchPost(postId);
-    
-          if (!searchPost) {
-            throw new Error("Post doesn't exist");
-          }
-    
-          await postBusiness.createComment(postId, comment, authorId);
-    
-          res.status(200).send({
-            message: "Post commented",
-          });
-        } catch (err) {
-          res.status(400).send({
-            message: err.message,
-          });
+        if (isLiked) {
+          throw new Error("You already liked this post");
         }
-        await BaseDatabase.destroyConnection();
+    
+        await postBusiness.likePost(post_id, user_id);
+    
+        res.status(200).send({
+          message: "Post Liked",
+        });
+      } catch (err) {
+        res.status(400).send({ error: err.message });
       }
+      await BaseDataBase.destroyConnection();
+    }
+
+
+
+
+      // async dislikePost(req: Request, res: Response) {
+    
+      //   try {
+      //     const token = req.headers.authorization!;
+      //     const id = auth.getData(token).id;
+    
+      //     const { postId } = req.params;
+    
+      //     if (!postId) {
+      //       throw new Error("Invalid Post ID");
+      //     }
+    
+      //     const searchPost = await postBusiness.searchPost(postId);
+    
+      //     if (!searchPost) {
+      //       throw new Error("Post doesn't exist");
+      //     }
+    
+      //     const isLiked = await postBusiness.isLiked(postId, id);
+    
+      //     if (!isLiked) {
+      //       throw new Error("You didn't like this post");
+      //     }
+    
+      //     await postBusiness.dislikePost(postId, id);
+    
+      //     res.status(200).send({
+      //       message: "Post disliked",
+      //     });
+    
+      //   } catch (err) {
+      //     res.status(400).send({
+      //       message: err.message,
+      //     });
+      //   }
+      //   await BaseDatabase.destroyConnection();
+      // }
+    
+      // async comment(req: Request, res: Response) {
+      //   try {
+      //     const token = req.headers.authorization!;
+      //     const authorId = auth.getData(token).id;
+      //     const { comment } = req.body;
+      //     const { postId } = req.params;
+    
+      //     if (!postId) {
+      //       throw new Error("Invalid Post ID");
+      //     }
+    
+      //     const searchPost = await postBusiness.searchPost(postId);
+    
+      //     if (!searchPost) {
+      //       throw new Error("Post doesn't exist");
+      //     }
+    
+      //     await postBusiness.createComment(postId, comment, authorId);
+    
+      //     res.status(200).send({
+      //       message: "Post commented",
+      //     });
+      //   } catch (err) {
+      //     res.status(400).send({
+      //       message: err.message,
+      //     });
+      //   }
+      //   await BaseDatabase.destroyConnection();
+      // }
 }
