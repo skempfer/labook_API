@@ -1,7 +1,6 @@
 import { BaseDataBase } from "./BaseDatabase";
 import { IdGenerator } from "../services/IdGenerator";
 import { Post } from "../models/Post";
-import { UserOrderInputDTO } from "../dto/PostDTO";
 
 export class PostDataBase extends BaseDataBase{
 
