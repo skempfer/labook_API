@@ -64,8 +64,6 @@ export class PostController {
       }
     }
 
-    //////////////////////////////////////////////////////////
-
     async likePost(req: Request, res: Response) {
       try {
         const token = req.headers.authorization as string;
@@ -100,46 +98,39 @@ export class PostController {
       await BaseDataBase.destroyConnection();
     }
 
-
-
-
-      // async dislikePost(req: Request, res: Response) {
+    async dislikePost(req: Request, res: Response) {
+      try {
+        const token = req.headers.authorization as string;
+        const idData = authenticator.getData(token);
+        const user_id = idData.id;    
+        const { post_id } = req.params;
     
-      //   try {
-      //     const token = req.headers.authorization!;
-      //     const id = auth.getData(token).id;
+        if (!post_id) {
+          throw new Error("Invalid Post ID");
+        }
     
-      //     const { postId } = req.params;
+        const searchPost = await postBusiness.searchPost(post_id);
     
-      //     if (!postId) {
-      //       throw new Error("Invalid Post ID");
-      //     }
+        if (!searchPost) {
+          throw new Error("Post doesn't exist");
+        }
     
-      //     const searchPost = await postBusiness.searchPost(postId);
+        const isLiked = await postBusiness.isLiked(user_id, post_id);
     
-      //     if (!searchPost) {
-      //       throw new Error("Post doesn't exist");
-      //     }
+        if (!isLiked) {
+          throw new Error("You didn't like this post");
+        }
     
-      //     const isLiked = await postBusiness.isLiked(postId, id);
+        await postBusiness.dislikePost(user_id, post_id);
     
-      //     if (!isLiked) {
-      //       throw new Error("You didn't like this post");
-      //     }
-    
-      //     await postBusiness.dislikePost(postId, id);
-    
-      //     res.status(200).send({
-      //       message: "Post disliked",
-      //     });
-    
-      //   } catch (err) {
-      //     res.status(400).send({
-      //       message: err.message,
-      //     });
-      //   }
-      //   await BaseDatabase.destroyConnection();
-      // }
+        res.status(200).send({
+          message: "Post disliked",
+        });
+      }catch(err){
+        res.status(400).send({ error: err.message});
+        }
+        await BaseDataBase.destroyConnection();
+      }
     
       // async comment(req: Request, res: Response) {
       //   try {
@@ -165,7 +156,7 @@ export class PostController {
       //     });
       //   } catch (err) {
       //     res.status(400).send({
-      //       message: err.message,
+      //        error: err.message
       //     });
       //   }
       //   await BaseDatabase.destroyConnection();

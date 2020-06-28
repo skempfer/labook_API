@@ -20,8 +20,6 @@ export class PostBusiness{
         return await this.postDataBase.getFeedByTypeAndPage(user_id, postsType, postPerPage, offset);
     };
 
-    //////////////////////////////////////////////////
-
     public async searchPost(post_id: string) {
       return await this.postDataBase.searchPost(post_id);
     };
@@ -34,10 +32,10 @@ export class PostBusiness{
       await this.postDataBase.likePost(user_id, post_id);
     };
     
-      // public async dislikePost(postId: string, userId: string) {
-      //   await this.postDatabase.dislikePost(postId, userId)
-    
-      // }
+    public async dislikePost(user_id: string, post_id: string) {
+      await this.postDataBase.dislikePost(user_id, post_id)
+    };
+
       // public async createComment(
       //   postId: string,
       //   comment: string,
