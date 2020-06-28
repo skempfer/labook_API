@@ -4,7 +4,8 @@ import { HashManager } from "../services/HashManager";
 import { Authenticator } from "../services/Authenticator";
 import { SignupInputDTO, LoginInputDTO} from "../dto/UserDTO";
 import { RefreshTokenDataBase } from "../data/RefreshTokenDatabase";
-
+import { UserDatabase } from "../data/UserDatabase";
+ 
 const userBusiness: UserBusiness = new UserBusiness();
 const authenticator = new Authenticator();
 const hashManager = new HashManager();
@@ -43,15 +44,16 @@ export class UserController {
    
   async login (req: Request, res: Response): Promise<void> {
       try {
-        if (!req.body.email || req.body.email.indexOf("@") === -1) {
-          throw new Error("Invalid email");
-        }
-    
+            
         const userData: LoginInputDTO = {
           email: req.body.email,
           password: req.body.password,
           device: req.body.device
         };    
+
+        if (!req.body.email || req.body.email.indexOf("@") === -1) {
+          throw new Error("Invalid email");
+        }
 
         const user = await userBusiness.login(userData.email);
     
@@ -91,12 +93,11 @@ export class UserController {
 
   async createFriendship(req: Request, res: Response): Promise<void> {
     try {
-        const token = req.headers.authorization as string;
+      const token = req.headers.authorization as string;
+      const idData = authenticator.getData(token);
+      const user_id = idData.id;
 
-        authenticator.getData(token);
-
-        const { user_id } = req.body;
-        const { friend_id } = req.body;
+      const { friend_id } = req.body;
 
       const id =  await userBusiness.createFriendship(user_id, friend_id);
 
@@ -113,13 +114,14 @@ export class UserController {
   async undoFriendship(req: Request, res: Response): Promise<void> {
     try{
       const token = req.headers.authorization as string;
+      const idData = authenticator.getData(token);
+      const user_id = idData.id;
     
       const { friend_id } = req.body;
 
-      const user = authenticator.getData(token);
-    
+          
       await userBusiness.deleteFriendship(
-        user.id, 
+        user_id, 
         friend_id
       );
 
@@ -141,7 +143,7 @@ export class UserController {
         throw new Error("Refresh Token has no device");
       };
 
-      const userDataBase = new UserDataBase();
+      const userDataBase = new UserDatabase();
       const user = await userDataBase.getUserById(refreshTokenData.id);
 
       const accessToken = authenticator.generateToken(
