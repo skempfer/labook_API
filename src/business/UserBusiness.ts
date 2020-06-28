@@ -29,6 +29,5 @@ export class UserBusiness{
 
     public async deleteFriendship(user_id: string, friend_id: string): Promise<any>{
          await this.userDatabase.deleteFriendship(user_id, friend_id);
-    };
-      
+    };      
 };

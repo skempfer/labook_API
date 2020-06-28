@@ -5,3 +5,7 @@ export interface createPostInputDTO {
     date: string,
     type: string
 };
+
+export interface UserOrderInputDTO{
+    type: string
+}

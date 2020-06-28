@@ -1,10 +1,9 @@
 import { BaseDataBase } from "./BaseDatabase";
 import { IdGenerator } from "../services/IdGenerator";
-import { User } from "../models/User";
 
 export class UserDatabase extends BaseDataBase {
-    static TABLE_NAME: string = "Labook_users";
 
+    static TABLE_NAME: string = "Labook_users";
     private idGenerator = new IdGenerator();
 
     public async signup(name: string, email: string, password: string) {

@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import { UserBusiness } from "../business/UserBusiness";
 import { HashManager } from "../services/HashManager";
 import { Authenticator } from "../services/Authenticator";
-import { SignupInputDTO} from "../dto/UserDTO";
-import { UserDatabase } from "../data/UserDatabase";
+import { SignupInputDTO, LoginInputDTO} from "../dto/UserDTO";
+import { RefreshTokenDataBase } from "../data/RefreshTokenDatabase";
 
 const userBusiness: UserBusiness = new UserBusiness();
 const authenticator = new Authenticator();
-const userDatabase = new UserDatabase();
 const hashManager = new HashManager();
 
 export class UserController {
@@ -17,7 +16,8 @@ export class UserController {
       const userData: SignupInputDTO = {
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        device: req.body.device
       }
             
       const hashManager = new HashManager();
@@ -25,9 +25,16 @@ export class UserController {
 
       const id = await userBusiness.signup(userData.name, userData.email, hashPassword);
 
-      const accessToken = authenticator.generateToken({ id  });
+      const accessToken = authenticator.generateToken({ 
+        id
+      }, process.env.ACCESS_TOKEN_EXPIRES_IN);
 
-      res.status(200).send({ accessToken });
+      const refreshToken = authenticator.generateToken({
+        id, 
+        device: userData.device
+      }, process.env.REFRESH_TOKEN_EXPIRES_IN);
+
+      res.status(200).send({ accessToken, refreshToken });
 
       } catch (err) {
         res.status(400).send({ error: err.message });
@@ -40,13 +47,11 @@ export class UserController {
           throw new Error("Invalid email");
         }
     
-        const userData = {
+        const userData: LoginInputDTO = {
           email: req.body.email,
           password: req.body.password,
-        };
-    
-
-        new UserDatabase();
+          device: req.body.device
+        };    
 
         const user = await userBusiness.login(userData.email);
     
@@ -56,12 +61,26 @@ export class UserController {
           throw new Error("Invalid password");
         }
     
-        const token = authenticator.generateToken({
-          id: user.id,
-        });
+        const accessToken = authenticator.generateToken({ 
+          id : user.id
+        }, process.env.ACCESS_TOKEN_EXPIRES_IN);
+  
+        const refreshToken = authenticator.generateToken({
+          id : user.id,
+          device: userData.device
+        }, process.env.REFRESH_TOKEN_EXPIRES_IN);
+
+        const refreshTokenDataBase = new RefreshTokenDataBase();
+        const refreshTokenFromDataBase = await refreshTokenDataBase.getRefreshTokenByIdAndDevide(user.id, userData.device);
     
+        if(refreshTokenDataBase){
+          await refreshTokenDataBase.deleteToken(refreshTokenFromDataBase.token);
+        };
+
+        await refreshTokenDataBase.createRefreshToken(refreshToken,user.user_id, userData.device, true ),
+
         res.status(200).send({
-          token,
+          accessToken, refreshToken
         });
       } catch (err) {
         res.status(400).send({
@@ -107,6 +126,33 @@ export class UserController {
       res.status(200).send({ message: "Friendship successfully undone!" })
     } catch(err) {
       res.status(400).send({ message: err.message });
+    }
+  }
+
+  async createRefreshToken(req: Request, res: Response): Promise<any> {
+    try{
+      const refreshToken = req.body.refreshToken;
+      const device = req.body.device;
+
+      const authenticator = new Authenticator;
+      const refreshTokenData = authenticator.getData(refreshToken);
+      
+      if(refreshTokenData.device !== device){
+        throw new Error("Refresh Token has no device");
+      };
+
+      const userDataBase = new UserDataBase();
+      const user = await userDataBase.getUserById(refreshTokenData.id);
+
+      const accessToken = authenticator.generateToken(
+        {
+          id: user.id,
+        }
+      );
+
+      res.status(200).send({accessToken});
+    }catch(err){
+      res.status(400).send({ error: err.message });
     }
   }
 }
