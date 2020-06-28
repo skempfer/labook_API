@@ -131,19 +131,14 @@ export class PostDataBase extends BaseDataBase{
         .where({ post_id,likedBy: user_id })
     }
 
-    //   public async createComment(
-    //     postId: string,
-    //     comment: string,
-    //     authorId: string
-        
-    //     ) {
-    //       await this.getConnection()
-    //        .insert({
-    //           postId,
-    //           comment,
-    //           authorId
-    //        })
-    //        .into("LaComments")
-    //     }
+    public async createComment(user_id: string, post_id: string, comment: string){
+        await this.getConnection()
+        .insert({
+        user_id,
+        post_id,
+        comment
+        })
+        .into("Labook_comments")
+    }
 
 };

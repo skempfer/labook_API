@@ -8,3 +8,4 @@ postRouter.get("/feed/:page", new PostController().getFeedAndPage);
 postRouter.get("/feed/:type/:page", new PostController().getFeedByTypeAndPage);
 postRouter.post("/post/like"), new PostController().likePost;
 postRouter.delete("/post/dislike"), new PostController().dislikePost;
+postRouter.post("/post/comment"), new PostController();

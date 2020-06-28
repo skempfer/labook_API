@@ -36,16 +36,7 @@ export class PostBusiness{
       await this.postDataBase.dislikePost(user_id, post_id)
     };
 
-      // public async createComment(
-      //   postId: string,
-      //   comment: string,
-      //   authorId: string
-      //   ) {
-      //   await this.postDatabase.createComment(
-      //     postId, 
-      //     comment,
-      //     authorId
-      //     )
-      //   }
-        
+    public async createComment(user_id: string, post_id: string, comment: string) {
+      await this.postDataBase.createComment(user_id, post_id, comment )
+    };        
 };
