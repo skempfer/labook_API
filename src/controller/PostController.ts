@@ -60,6 +60,7 @@ export class PostController {
     }catch (err) {
       res.status(400).send({ error: err.message });
     };
+    await BaseDataBase.destroyConnection();
   };
 
   async likePost(req: Request, res: Response) {
