@@ -44,6 +44,7 @@ npm install
 * [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 * [ts-node-dev](https://www.npmjs.com/package/ts-node-dev)
 * [ts-node](https://www.npmjs.com/package/ts-node?activeTab=readme)
+
 e suas versões @type
 
 ## Desenvolvedoras:  :computer:  :woman:

@@ -5,6 +5,7 @@ import { Authenticator } from "../services/Authenticator";
 import { SignupInputDTO, LoginInputDTO} from "../dto/UserDTO";
 import { RefreshTokenDataBase } from "../data/RefreshTokenDatabase";
 import { UserDatabase } from "../data/UserDatabase";
+import { BaseDataBase } from "../data/BaseDatabase";
  
 const userBusiness: UserBusiness = new UserBusiness();
 const authenticator = new Authenticator();
@@ -40,6 +41,7 @@ export class UserController {
       } catch (err) {
         res.status(400).send({ error: err.message });
       }
+      await BaseDataBase.destroyConnection();
   }
    
   async login (req: Request, res: Response): Promise<void> {
@@ -102,13 +104,14 @@ export class UserController {
       const id =  await userBusiness.createFriendship(user_id, friend_id);
 
       authenticator.generateToken({
-          id: id                
+        id: id                
       });
 
-        res.status(200).send({ message: "Friendship request sent successfully!" })
+      res.status(200).send({ message: "Friendship request sent successfully!" })
     } catch(err) {
-        res.status(400).send({ error: err.message });
+      res.status(400).send({ error: err.message });
     }
+    await BaseDataBase.destroyConnection();
   }
 
   async undoFriendship(req: Request, res: Response): Promise<void> {
@@ -129,6 +132,7 @@ export class UserController {
     } catch(err) {
       res.status(400).send({ message: err.message });
     }
+    await BaseDataBase.destroyConnection();
   }
 
   async createRefreshToken(req: Request, res: Response): Promise<any> {
@@ -156,5 +160,6 @@ export class UserController {
     }catch(err){
       res.status(400).send({ error: err.message });
     }
+    await BaseDataBase.destroyConnection();
   }
 }
