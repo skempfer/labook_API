@@ -18,9 +18,6 @@ Você pode utilizar a documentação oficial:
 
 * [Postman](https://explore.postman.com/templates/10027/doc-api---labook)
 
-### Pré-requisitos: :triangular_flag_on_post:
-
-A versão atual não necessita de pré-requisitos.
 
 ### Instalando: :heavy_check_mark:
 
