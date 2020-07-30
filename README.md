@@ -20,7 +20,7 @@
 
 ## Documentação oficial da API com Postman: :rocket:
 
-* [Labook](https://documenter.getpostman.com/view/10904449/T17AkWr2?version=latest)
+* [Postman](https://documenter.getpostman.com/view/10904449/T17AkWr2?version=latest)
 
 
 ## pré-requesitos :no_entry_sign:
